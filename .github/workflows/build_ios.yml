@@ -1,33 +1,62 @@
 name: Build iOS IPA
+
 on: [push]
 
+
+
 jobs:
+
   build:
+
     runs-on: macos-latest
+
     steps:
+
       - uses: actions/checkout@v4
 
+
+
       - name: Set up Python
+
         uses: actions/setup-python@v5
+
         with:
+
           python-version: '3.11'
 
+
+
       - name: Install Dependencies
+
         run: |
+
           pip install flet requests
 
+
+
       - name: Build App
+
         run: |
-          # Используем модуль flet напрямую через python
-          python -m flet build ipa \
-            --product "P4Installer" \
-            --org "com.p4team.installer" \
-            --assets "assets"
+
+          # Убираем -r, так как библиотеки уже в окружении
+
+          # Добавляем --module-name, чтобы явно указать главный файл
+
+          flet build ipa --yes --product "P4Installer" --org com.p4team.installer --icon "image.png"
+
+          
 
       - name: Upload Build
+
         uses: actions/upload-artifact@v4
+
         with:
+
           name: P4Installer-IPA
+
           # На твоем скриншоте (image_7f59bd) путь был build/ipa
+
           path: build/**/*.app
+
           if-no-files-found: error
+
