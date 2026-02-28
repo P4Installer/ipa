@@ -18,13 +18,12 @@ jobs:
 
       - name: Build App
         run: |
-          # 1. Check if the icon actually exists to prevent silent errors
-          ls -lh image.png || echo "Icon not found at root!"
-          
-          # 2. Run the build
-          # Tip: If image.png is in an assets folder, use --icon assets/image.png
-          flet build ipa --module-name main --product "P4Installer" --org com.p4team.installer --icon "image.png" --no-prevent-sleep --verbose
-          
+          # Используем модуль flet напрямую через python
+          python -m flet build ipa \
+            --product "P4Installer" \
+            --org "com.p4team.installer" \
+            --assets "assets"
+
       - name: Upload Build
         uses: actions/upload-artifact@v4
         with:
