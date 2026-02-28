@@ -16,7 +16,7 @@ jobs:
         run: |
           pip install flet requests
 
-        - name: Build App
+      - name: Build App
         run: |
           # Мы добавили -r requirements.txt
           flet build ipa --yes --product "P4Installer" --org com.p4team.installer -r requirements.txt
