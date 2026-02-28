@@ -24,8 +24,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: my-ios-app
-          # Этот путь охватывает все возможные места, куда Flet мог сохранить результат
-          path: |
-            build/ipa/*.ipa
-            build/ios/iphoneos/*.app
-            build/ios/iphoneos/*.ipa
+          # Мы просим GitHub найти ЛЮБОЙ файл .ipa или .app в папке build
+          path: build/**/iphoneos/*.app
+          if-no-files-found: error # Если опять не найдет, он выдаст четкую ошибку
