@@ -1,0 +1,23 @@
+name: Build iOS IPA
+on: [push]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Flet
+        run: pip install flet
+      - name: Build App Bundle
+        run: |
+          # Собираем проект без подписи (так как нет платного аккаунта)
+          flet build ios --no-copy-itunes-artwork
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-app-bundle
+          path: build/ios/iphoneos/*.app
