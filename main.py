@@ -13,10 +13,10 @@ def main(page: ft.Page):
     page.bgcolor = "#0e0e0e"
     page.padding = 20
     
-    # Список для хранения добавленных репозиториев в рамках сессии
+    # Временный список для сессии
     user_repos = []
 
-    # Контейнер для динамического контента (список приложений из JSON)
+    # Контейнер для динамического контента
     dynamic_content = ft.Column(spacing=10)
 
     def load_repos():
@@ -29,14 +29,11 @@ def main(page: ft.Page):
         new_controls = []
         for url in all_repos:
             try:
-                # Обход кэша через timestamp
                 res = requests.get(f"{url}?t={int(time.time())}", timeout=5)
                 if res.status_code == 200:
                     data = res.json()
-                    # Заголовок источника
                     new_controls.append(ft.Text(data.get("repo_name", "Источник"), size=22, weight="bold"))
 
-                    # Пакеты внутри
                     for pkg in data.get("packages", []):
                         new_controls.append(
                             ft.Container(
@@ -67,10 +64,7 @@ def main(page: ft.Page):
                 print(f"Ошибка: {ex}")
 
         dynamic_content.controls.clear()
-        if new_controls:
-            dynamic_content.controls.extend(new_controls)
-        else:
-            dynamic_content.controls.append(ft.Text("Репозитории загружаются...", color="grey"))
+        dynamic_content.controls.extend(new_controls if new_controls else [ft.Text("Загрузка...")])
         page.update()
 
     def add_repo_click(e):
@@ -94,8 +88,8 @@ def main(page: ft.Page):
             ft.Text("Добавить источник", size=22, weight="bold", margin=ft.margin.only(top=20)),
             ft.Row([
                 repo_input,
-                # Использована строка "add"
-                ft.IconButton(icon="add", on_click=add_repo_click, bgcolor="#2fb5d2", icon_color="white")
+                # ИСПРАВЛЕНО: используем строку "add"
+                ft.IconButton(icon=ft.Icons.SETTINGS, on_click=add_repo_click, bgcolor="#2fb5d2", icon_color="white")
             ]),
             dynamic_content,
             ft.Text("Стандартные", size=22, weight="bold", margin=ft.margin.only(top=20)),
@@ -106,7 +100,7 @@ def main(page: ft.Page):
                         width=54, height=54,
                         gradient=ft.LinearGradient(["#5856d6", "#3533a3"]),
                         border_radius=12,
-                        # ИСПРАВЛЕНО: используем объект Alignment напрямую (координаты 0,0 это центр)
+                        # ИСПРАВЛЕНО: используем строку "center"
                         alignment=ft.Alignment(0, 0)
                     ),
                     ft.Column([
@@ -127,5 +121,4 @@ def main(page: ft.Page):
 
     load_repos()
 
-# Важный момент: для некоторых сред сборки
 ft.app(target=main)
