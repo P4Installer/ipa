@@ -42,7 +42,7 @@ jobs:
 
           # Добавляем --module-name, чтобы явно указать главный файл
 
-          flet build ipa --yes --product "P4Installer" --icon "image.png" --org com.p4team.installer 
+          flet build ipa --yes --product "P4Installer" --icon "/image.png" --org com.p4team.installer 
 
           
 
