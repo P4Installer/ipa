@@ -25,6 +25,6 @@ jobs:
       - name: Upload Build
         uses: actions/upload-artifact@v4
         with:
-          name: P4Installer-Release
-          path: build/ipa/*.ipa
+          name: P4Installeк
+          path: build/**/*.app
           if-no-files-found: error
