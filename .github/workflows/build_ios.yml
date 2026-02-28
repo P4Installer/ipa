@@ -16,11 +16,10 @@ jobs:
         run: |
           pip install flet requests
 
-      - name: Build App
+        - name: Build App
         run: |
-          # --product задает имя приложения на главном экране
-          # --org задает уникальный ID (например, com.yourname.p4installer)
-          flet build ipa --yes --product "P4Installer" --org com.p4team.installer
+          # Мы добавили -r requirements.txt
+          flet build ipa --yes --product "P4Installer" --org com.p4team.installer -r requirements.txt
 
       - name: Upload Build
         uses: actions/upload-artifact@v4
