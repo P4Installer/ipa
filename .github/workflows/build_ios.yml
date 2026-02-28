@@ -24,6 +24,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: my-ios-app
-          # Мы просим GitHub найти ЛЮБОЙ файл .ipa или .app в папке build
-          path: build/**/iphoneos/*.app
-          if-no-files-found: error # Если опять не найдет, он выдаст четкую ошибку
+          # Мы используем три звездочки, чтобы найти ЛЮБОЙ .app или .ipa в папке build
+          path: build/**/*.app
+          if-no-files-found: error
