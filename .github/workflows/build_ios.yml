@@ -12,18 +12,16 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install Dependencies
-        run: |
-          pip install flet
-          # Если используешь другие библиотеки, добавь их сюда
+      - name: Install Flet
+        run: pip install flet
 
       - name: Build App
         run: |
-          # Собираем только структуру приложения
-          flet build ipa --no-copy-itunes-artwork --no-version-check
-
+          # Самая простая команда сборки без лишних флагов
+          flet build ipa
+          
       - name: Upload Build
         uses: actions/upload-artifact@v4
         with:
           name: my-ios-app
-          path: build/ios/iphoneos/*.app
+          path: build/ipa/*.ipa
