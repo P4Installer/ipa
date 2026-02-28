@@ -12,18 +12,19 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install Flet
-        run: pip install flet
+      - name: Install Dependencies
+        run: |
+          pip install flet requests
 
       - name: Build App
         run: |
-          # Флаг --yes говорит "да" на все вопросы установщика
-          flet build ipa --yes
-          
+          # --product задает имя приложения на главном экране
+          # --org задает уникальный ID (например, com.yourname.p4installer)
+          flet build ipa --yes --product "P4Installer" --org com.p4team.installer
+
       - name: Upload Build
         uses: actions/upload-artifact@v4
         with:
-          name: my-ios-app
-          # Мы используем три звездочки, чтобы найти ЛЮБОЙ .app или .ipa в папке build
-          path: build/**/*.app
+          name: P4Installer-Release
+          path: build/ipa/*.ipa
           if-no-files-found: error
