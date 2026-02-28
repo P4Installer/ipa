@@ -24,4 +24,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: my-ios-app
-          path: build/ipa/*.ipa
+          # Этот путь охватывает все возможные места, куда Flet мог сохранить результат
+          path: |
+            build/ipa/*.ipa
+            build/ios/iphoneos/*.app
+            build/ios/iphoneos/*.ipa
