@@ -18,12 +18,14 @@ jobs:
 
       - name: Build App
         run: |
-          # Мы добавили -r requirements.txt
-          flet build ipa --yes --product "P4Installer" --org com.p4team.installer -r requirements.txt
-
+          # Убираем -r, так как библиотеки уже в окружении
+          # Добавляем --module-name, чтобы явно указать главный файл
+          flet build ipa --yes --product "P4Installer" --org com.p4team.installer
+          
       - name: Upload Build
         uses: actions/upload-artifact@v4
         with:
-          name: P4Installeк
+          name: P4Installer-IPA
+          # На твоем скриншоте (image_7f59bd) путь был build/ipa
           path: build/**/*.app
           if-no-files-found: error
