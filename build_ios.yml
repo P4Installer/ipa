@@ -3,22 +3,21 @@ on: [push]
 
 jobs:
   build:
-    runs-on: macos-latest  # Вот тут мы запрашиваем виртуальный Mac
+    runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - name: Install Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
-      - name: Install Briefcase
+      - name: Install Flet
+        run: pip install flet
+      - name: Build App Bundle
         run: |
-          python -m pip install --upgrade pip
-          pip install briefcase
-
-      - name: Build iOS App
-        run: |
-          briefcase create ios
-          briefcase build ios
-          # На этом этапе создается проект Xcode в облаке
+          # Собираем проект без подписи (так как нет платного аккаунта)
+          flet build ios --no-copy-itunes-artwork
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-app-bundle
+          path: build/ios/iphoneos/*.app
