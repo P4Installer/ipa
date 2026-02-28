@@ -20,7 +20,7 @@ jobs:
         run: |
           # Убираем -r, так как библиотеки уже в окружении
           # Добавляем --module-name, чтобы явно указать главный файл
-          flet build ipa --yes --product "P4Installer" --org com.p4team.installer
+          flet build ipa --yes --product "P4Installer" --org com.p4team.installer --icon "image.png"
           
       - name: Upload Build
         uses: actions/upload-artifact@v4
