@@ -17,8 +17,8 @@ jobs:
 
       - name: Build App
         run: |
-          # Самая простая команда сборки без лишних флагов
-          flet build ipa
+          # Флаг --yes говорит "да" на все вопросы установщика
+          flet build ipa --yes
           
       - name: Upload Build
         uses: actions/upload-artifact@v4
