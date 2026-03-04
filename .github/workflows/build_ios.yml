@@ -1,62 +1,45 @@
 name: Build iOS IPA
-
 on: [push]
 
-
-
 jobs:
-
   build:
-
     runs-on: macos-latest
-
     steps:
-
       - uses: actions/checkout@v4
 
-
-
       - name: Set up Python
-
         uses: actions/setup-python@v5
-
         with:
-
           python-version: '3.11'
 
-
-
       - name: Install Dependencies
-
         run: |
+          python -m pip install --upgrade pip
+          # Устанавливаем самую свежую версию flet, где эта ошибка исправлена
+          pip install --upgrade flet httpx requests
 
-          pip install flet requests
-
-
-
-      - name: Build App
-
-        run: |
-
-          # Убираем -r, так как библиотеки уже в окружении
-
-          # Добавляем --module-name, чтобы явно указать главный файл
-
-          flet build ipa --yes --product "P4Installer" --org com.p4team.installer 
-
-          
-
-      - name: Upload Build
-
-        uses: actions/upload-artifact@v4
-
+      - name: Setup Flutter
+        # Явно устанавливаем Flutter, чтобы Flet не пытался скачать его сам
+        uses: subosito/flutter-action@v2
         with:
+          channel: 'stable'
 
-          name: P4Installer-IPA
+      - name: Build App Bundle
+        run: |
+          # Запускаем сборку. Если упадет с 'unicode', флаг --verbose покажет где именно
+          flet build ipa --yes --product "llorTStore" --org com.p4.llorTStore --verbose
 
-          # На твоем скриншоте (image_7f59bd) путь был build/ipa
-
-          path: build/**/*.app
-
+      - name: Create TrollStore IPA
+        # Для TrollStore нужно просто положить .app в папку Payload и зазиповать
+        run: |
+          mkdir -p Payload
+          # Ищем собранный .app и копируем его
+          cp -r build/**/*.app Payload/
+          zip -r llorTStore.ipa Payload
+                    
+      - name: Upload Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: llorTStore-TrollStore
+          path: llorTStore.ipa
           if-no-files-found: error
-
